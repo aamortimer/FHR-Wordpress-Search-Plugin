@@ -4,7 +4,7 @@ Plugin Name: FHR Search
 Plugin URI: http://www.fhr-net.co.uk/
 Description: Plugin to allow you to add FHR searches to your site. please visit <strong>settings</strong> when installed to add all your default options also you will be able to switch to the about tab which will list all shortcodes.
 Author: Andy Mortimer
-Version: 1
+Version: 1.1
 Author URI: http://www.fhr-net.co.uk/
 */
 
@@ -12,6 +12,7 @@ require_once('api.php');
 require_once('shortcodes.php');
 require_once('widget.php');
 require_once('fhr_options.php');
+require_once('lib/WordPress-GitHub-Plugin-Updater/updater.php');
 
 
 /*
@@ -104,16 +105,22 @@ add_shortcode('fhr_carpark_list', 'fhr_carpark_list_shortcode');
 add_shortcode('fhr_results', 'fhr_results_shortcode');
 add_shortcode('fhr_hotel_list', 'fhr_hotel_list_shortcode');
 
- 
 
-/*
-add_action('init', 'fhr_activate_au');  
-function fhr_activate_au() {  
-  require_once ('lib/wp_autoupdate.php');  
-  $wptuts_plugin_current_version = '1.0';  
-  $wptuts_plugin_remote_path = 'http://www.fhr-net.co.uk/wp-update.php';  
-  $wptuts_plugin_slug = plugin_basename(__FILE__);  
-  new wp_auto_update ($wptuts_plugin_current_version, $wptuts_plugin_remote_path, $wptuts_plugin_slug);  
-}  
-*/
+
+if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+  $config = array(
+      'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+      'proper_folder_name' => 'fhr', // this is the name of the folder your plugin lives in
+      'api_url' => 'https://api.github.com/repos/aamortimer/FHR-Wordpress-Search-Plugin', // the github API url of your github repo
+      'raw_url' => 'https://raw.github.com/aamortimer/FHR-Wordpress-Search-Plugin/master', // the github raw url of your github repo
+      'github_url' => 'https://github.com/aamortimer/FHR-Wordpress-Search-Plugin', // the github url of your github repo
+      'zip_url' => 'https://github.com/aamortimer/FHR-Wordpress-Search-Plugin/zipball/master', // the zip url of the github repo
+      'sslverify' => true // wether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+      'requires' => '3.0', // which version of WordPress does your plugin require?
+      'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+      'readme' => 'README.md', // which file to use as the readme for the version number
+      'access_token' => '', // Access private repositories by authorizing under Appearance > Github Updates when this example plugin is installed
+  );
+  new WP_GitHub_Updater($config);
+}
 ?>
