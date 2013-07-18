@@ -1,3 +1,5 @@
+~Current Version:1.4~
+
 #FHR Search Plugin
 
 This Wordpress plugin allow you to easily add FHR searches to your Wordpress site, the plugin contains
