@@ -101,4 +101,5 @@ All parameters are optional
 
 ##Change Log
 v1.6 Added XML results for airport lounges
+
 v1.5 Added XML results for airport parking
