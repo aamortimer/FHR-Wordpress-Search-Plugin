@@ -5,6 +5,10 @@
 This Wordpress plugin allow you to easily add FHR searches to your Wordpress site, the plugin contains
 several widgets which allow you to add each of the search form FHR provide and also list all the hotels and car parks available. 
 
+
+##Become an FHR affiliate
+The FHR affiliate program is run though Affiliate Window if you would like to join please go to  [http://www.fhr-net.co.uk/affiliate/](http://www.fhr-net.co.uk/affiliate/ "Join FHR Affiliate Program")
+
 ##Shortcodes
 
 ###[fhr_search_form]
