@@ -10,32 +10,68 @@
 			return json_decode($url);
 		}
 		
-		static function parking_search($airport, $arrival_date, $arrival_time, $return_date, $return_time) {
+		static function parking_search() {
 			$options = get_option('fhr_settings');
 			
-			$terminal = '';
-			$terminal_id = '';
-			$error_response = '';
-			if(strstr($airport, '-')){
-			  $a = explode('-',$airport);
-			  $airport = $a[0];
-			  $terminal = '<terminal>'.$a[1].'</terminal>';
-			  $terminal_id = $a[1];
+			$airport 						= isset($_GET['airport']) ? $_GET['airport'] : false;
+			$arrival_date 			= isset($_GET['parking-from']) ? $_GET['parking-from'] : false;
+			$arrival_time_hour	= isset($_GET['parking-start-hour']) ? $_GET['parking-start-hour'] : false;
+			$arrival_time_min 	= isset($_GET['parking-start-min']) ? $_GET['parking-start-min'] : false;
+			$return_date 				= isset($_GET['parking-to']) ? $_GET['parking-to'] : false;
+			$return_time_hour		= isset($_GET['parking-end-hour']) ? $_GET['parking-end-hour'] : false;
+			$return_time_min		= isset($_GET['parking-end-min']) ? $_GET['parking-end-min'] : false;
+			$agent							= $options['agent'];
+			$affwin							= $options['affwin'];
+					
+			$data = self::get('http://www.fhr-net.co.uk/api/parking-search.php?airport='.$airport.'&parking-from='.$arrival_date.'&parking-to='.$return_date.'&parking-start-hour='.$arrival_time_hour.'&parking-start-min='.$arrival_time_min.'&parking-end-hour='.$return_time_hour.'&parking-end-min='.$return_time_min.'&agent='.$agent);
+			$data = json_decode($data);
+			
+			//print_r($data);die();
+			
+			$affwin_link = '';
+			if ($affwin) {
+				$affwin_link = 'http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&OverrideAgent='.$agent.'&clickref=&p=';
 			}
 			
-			$agent = isset($options['agent']) ? $options['agent'] : 'fhr';
+			if ($data) {
+			?>
+				<div id="fhr-search-details">
+					<h2>Search Details</h2>
+					<ul>
+						<li><strong>Airport</strong> <?php echo $data->search_details->airport; ?></li>
+						<li><strong>Arrival Date and Time</strong> <?php echo $data->search_details->arrival_date; ?> at <?php echo $data->search_details->arrival_time; ?></li>
+						<li><strong>Return Date and Time</strong> <?php echo $data->search_details->return_date; ?> at <?php echo $data->search_details->return_time; ?></li>
+					</ul>
+				</div>
+				<div id="fhr-search-results">
+				<?php foreach($data->carparks as $carpark) : ?>
+					<div class="fhr-results">
+						<h2 class="fhr-results-title">
+							<a href="<?php echo $affwin_link.$carpark->deeplink; ?>" title="<?php echo $carpark->car_park_name; ?> More Information">
+								<?php echo $carpark->car_park_name; ?>
+							</a>
+						</h2>
+						<span class="fhr-results-image">
+							<img src="<?php echo $carpark->picture; ?>" title="<?php echo $carpark->car_park_name; ?>" alt="<?php echo $carpark->car_park_name; ?>" />
+						</span>
+						<ul class="fhr-results-sales-messages">
+							<?php if ($carpark->sales_messages_1 !== '') : ?><li><?php echo $carpark->sales_messages_1; ?></li><?php endif; ?>
+							<?php if ($carpark->sales_messages_2 !== '') : ?><li><?php echo $carpark->sales_messages_2; ?></li><?php endif; ?>
+							<?php if ($carpark->sales_messages_3 !== '') : ?><li><?php echo $carpark->sales_messages_3; ?></li><?php endif; ?>
+							<?php if ($carpark->sales_messages_4 !== '') : ?><li><?php echo $carpark->sales_messages_4; ?></li><?php endif; ?>
+						</ul>
+						<span class="fhr-results-price">
+							<strong>&#163;<?php echo $carpark->price; ?></strong>
+							<a href="<?php echo $affwin_link.$carpark->booking_deeplink; ?>" title="Book <?php echo $carpark->car_park_name; ?>" class="fhr-button">Book Now</a>
+						</span>
 						
-		  $data = '<?xml version="1.0" encoding="UTF-8"?>
-							<request type="parkingandhotelquote" user="'.$agent.'" pass="" ip="" test="false">	
-								<airport_id>'.$airport.'</airport_id>
-								'.$terminal.'
-								<arrival_date>'.$arrival_date.'</arrival_date>
-								<dep_time>'.$arrival_time.'</dep_time>
-								<rtn_date>'.$return_date.'</rtn_date>
-								<rtn_time>'.$return_time.'</rtn_time>
-								<show_discount>True</show_discount>
-								<show_sales_messages>True</show_sales_messages>
-							</request>';
+					</div>
+				<?php endforeach; ?>
+				</div>
+			<?php
+			} else {
+				echo '<div class="error">Sorry we were unable to complete your search please try again later.</div>';
+			}
 		}
 		
 		static function get($url, $data = false) {

@@ -1,4 +1,4 @@
-~Current Version:1.4~
+~Current Version:1.5~
 
 #FHR Search Plugin
 
@@ -93,3 +93,7 @@ All parameters are optional
 + *type* default is business, options are abstract, city, people, transport, animals, food, nature, nightlife, sports, cats, fashion or technics
 + *width* the width of the image default is 200
 + *height* the height of the image default is 200
+
+
+##Change Log
+Added XML results for airport parking

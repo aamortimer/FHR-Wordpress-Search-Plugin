@@ -14,7 +14,7 @@
 		$results_type = isset($options['results_type']) ? $options['results_type'] : 'new';
 		$results_form = isset($options['results_form']) ? $options['results_form'] : 'airport-parking';
 		
-		if ($results_type == 'iframe')  {
+		if ($results_type == 'iframe' || ($results_type == 'xml' && $results_form !== 'parking'))  {
 			if ($results_form == 'airport-parking') {
 				$html = '<iframe src="http://www.fhr-net.co.uk/airport-parking/results/?'.$params.'" frameborder="0" scrolling="auto" width="100%" height="2000"></iframe>';	
 			} elseif ($results_form == 'airport-lounge') {
@@ -23,7 +23,7 @@
 				$html = '<iframe src="http://www.fhr-net.co.uk/airport-hotels/results/?'.$params.'" frameborder="0" scrolling="auto" width="100%" height="2000"></iframe>';	
 			}
 		} else {
-			$html = 'xml';
+			$html = fhr::parking_search();
 		}
 		
 		return $html;
@@ -160,24 +160,24 @@
 		
 		switch($form) {
 			case 'airport-parking': 
-				$search_form = $results_type == 'iframe' ? get_permalink($results_page) : 'http://www.fhr-net.co.uk/airport-parking/results/';
+				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-parking/results/' : get_permalink($results_page) ;
 				$airports = fhr::airports('parking');
 				require_once('forms/parking_search_form.php');
 				break;
 			case 'airport-parking-and-hotels': 
-				$search_form = $results_type == 'iframe' ? get_permalink($results_page) : 'http://www.fhr-net.co.uk/airport-hotels/results/';
+				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-hotels/results/' : get_permalink($results_page) ;
 				$airports = fhr::airports('hotels');
 				$rooms = fhr::room_types();
 				require_once('forms/hotel_search_form.php');
 				break;
 			case 'airport-hotels':
-				$search_form = $results_type == 'iframe' ? get_permalink($results_page) : 'http://www.fhr-net.co.uk/airport-hotels/results/';
+				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-hotels/results/' : get_permalink($results_page);
 				$airports = fhr::airports('hotels');
 				$rooms = fhr::room_types();
 				require_once('forms/hotel_search_form.php');
 				break;
 			case 'airport-lounge':
-				$search_form = $results_type == 'iframe' ? get_permalink($results_page) : 'http://www.fhr-net.co.uk/airport-lounges/results/';
+				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-lounges/results/' : get_permalink($results_page);
 				$sel_lounge_location = isset($_GET['lounge_location']) ? $_GET['lounge_location'] : 'ukLounges';
 				
 				if ($sel_lounge_location == 'ukLounges') {
