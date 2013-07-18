@@ -10,6 +10,71 @@
 			return json_decode($url);
 		}
 		
+		static function lounge_search() {
+			$options = get_option('fhr_settings');
+			
+			$airport 						= isset($_GET['airport']) ? $_GET['airport'] : false;
+			$arrival_date 			= isset($_GET['lounge-from']) ? $_GET['lounge-from'] : false;
+			$adults				 			= isset($_GET['adults']) ? $_GET['adults'] : false;
+			$children			 			= isset($_GET['children']) ? $_GET['children'] : 0;
+			$infants			 			= isset($_GET['infants']) ? $_GET['infants'] : false;
+			$agent							= $options['agent'];
+			$affwin							= $options['affwin'];
+
+			$data = self::get('http://www.fhr-net.co.uk/api/lounge-search.php?airport='.$airport.'&lounge-from='.$arrival_date.'&adults='.$adults.'&children='.$children.'&infants='.$infants.'&agent='.$agent);
+			$data = json_decode($data);
+			
+			$affwin_link = '';
+			if ($affwin) {
+				$affwin_link = 'http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&OverrideAgent='.$agent.'&clickref=&p=';
+			}
+			
+			//print_r($data);die();
+			
+			if ($data) {
+			?>
+				<div id="fhr-search-details">
+					<h2>Search Details</h2>
+					<ul>
+						<li><strong>Airport</strong> <?php echo $data->search_details->airport; ?></li>
+						<li><strong>Arrival Date</strong> <?php echo $data->search_details->lounge_from; ?></li>
+						<li><strong>Adults</strong> <?php echo $data->search_details->adults; ?></li>
+						<li><strong>Children</strong> <?php echo $data->search_details->children; ?></li>
+						<li><strong>Infants</strong> <?php echo $data->search_details->infants; ?></li>
+					</ul>
+				</div>
+				<div id="fhr-search-results" class="fhr-airport-lounges">
+					<?php foreach($data->lounges as $result) : ?>
+						<div class="fhr-results">
+							<h2 class="fhr-results-title">
+								<a href="<?php echo $affwin_link.$result->deeplink; ?>" title="<?php echo $result->airportLoungeName; ?> More Information">
+									<?php echo $result->airportLoungeName; ?>
+								</a>
+							</h2>
+							<span class="fhr-results-image">
+								<img src="<?php echo $result->picture; ?>" title="<?php echo $result->airportLoungeName; ?>" alt="<?php echo $result->airportLoungeName; ?>" />
+							</span>
+							<ul class="fhr-results-sales-messages">
+								<?php if ($result->sales_message1 !== '') : ?><li><?php echo $result->sales_message1; ?></li><?php endif; ?>
+								<?php if ($result->sales_message2 !== '') : ?><li><?php echo $result->sales_message2; ?></li><?php endif; ?>
+								<?php if ($result->sales_message3 !== '') : ?><li><?php echo $result->sales_message3; ?></li><?php endif; ?>
+								<?php if ($result->sales_message4 !== '') : ?><li><?php echo $result->sales_message4; ?></li><?php endif; ?>
+							</ul>
+							<span class="fhr-results-price">
+								<strong>&#163;<?php echo $result->total_price; ?> </strong>
+								<a href="<?php echo $affwin_link.$result->booking_deeplink; ?>" title="Book <?php echo $result->airportLoungeName; ?>" class="fhr-button">Book Now</a>
+							</span>
+							
+						</div>
+					<?php endforeach; ?>
+				</div>
+			<?php
+			} else {
+				echo '<div class="error">Sorry we were unable to complete your search please try again later.</div>';
+			}
+
+		}
+		
 		static function parking_search() {
 			$options = get_option('fhr_settings');
 			
@@ -43,7 +108,7 @@
 						<li><strong>Return Date and Time</strong> <?php echo $data->search_details->return_date; ?> at <?php echo $data->search_details->return_time; ?></li>
 					</ul>
 				</div>
-				<div id="fhr-search-results">
+				<div id="fhr-search-results" class="fhr-airport-parking">
 				<?php foreach($data->carparks as $carpark) : ?>
 					<div class="fhr-results">
 						<h2 class="fhr-results-title">
