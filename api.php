@@ -138,6 +138,119 @@
 				echo '<div class="error">Sorry we were unable to complete your search please try again later.</div>';
 			}
 		}
+
+		static function hotel_search() {
+			$options = get_option('fhr_settings');
+
+			$airport 						= isset($_GET['airport']) ? $_GET['airport'] : false;
+			$hotel_from 				= isset($_GET['hotel-from']) ? $_GET['hotel-from'] : false;
+			$room_type 					= isset($_GET['room-type']) ? $_GET['room-type'] : false;
+			$number_of_rooms 		= isset($_GET['number-of-rooms']) ? $_GET['number-of-rooms'] : false;
+			$parking_return 		= isset($_GET['parking-return']) ? $_GET['parking-return'] : false;
+			$hotel_stay 				= isset($_GET['hotel-stay']) ? $_GET['hotel-stay'] : false;
+			$parking_options 		= isset($_GET['parking-options']) ? $_GET['parking-options'] : false;
+			$parking_ind 				= isset($_GET['parking-ind']) ? $_GET['parking-ind'] : false;
+			$hotel_stay_before  = isset($_GET['hotel-stay']) ? $_GET['hotel-stay'] : false;
+			$agent							= $options['agent'];
+			$affwin							= $options['affwin'];
+		
+			if ($options['results_form'] == 'airport-hotels') {
+				$url = 'http://www.fhr-net.co.uk/api/hotel-search.php?airport='.$airport.'&hotel-from='.$hotel_from.'&room-type='.$room_type.'&number-of-rooms='.$number_of_rooms.'&parking-options='.$parking_options.'&parking-ind='.$parking_ind.'&agent='.$agent;
+			} else {
+				$url = 'http://www.fhr-net.co.uk/api/hotel-search.php?airport='.$airport.'&hotel-from='.$hotel_from.'&room-type='.$room_type.'&number-of-rooms='.$number_of_rooms.'&parking-return='.$parking_return.'&parking-options='.$parking_options.'&parking-ind='.$parking_ind.'&agent='.$agent;
+			}
+
+			$data = self::get($url);
+			$data = json_decode($data);
+
+			if ($data) {
+				?>
+					<div id="fhr-search-details">
+					<h2>Search Details</h2>
+					<ul>
+						<li><strong>Airport</strong> <?php echo $data->search_details->airport; ?></li>
+						<li><strong>Arrival Date</strong> <?php echo $data->search_details->arrival_date; ?></li>
+						<li><strong>Room(s)</strong> <?php echo $data->search_details->number_of_rooms; ?> * <?php echo $data->search_details->room; ?></li>
+					</ul>
+				</div>
+				<div id="fhr-search-results" class="fhr-airport-hotel">
+					<?php foreach($data->hotels as $hotel) : ?>
+						<div class="fhr-results">
+							<h2 class="fhr-results-title">
+								<a href="<?php echo $affwin_link.$hotel->deeplink; ?>" title="<?php echo $hotel->hotel_name; ?> More Information">
+									<?php echo $hotel->hotel_name; ?>
+								</a>
+							</h2>
+							<span class="fhr-results-image">
+								<img src="<?php echo $hotel->picture; ?>" title="<?php echo $hotel->hotel_name; ?>" alt="<?php echo $hotel->hotel_name; ?>" />
+							</span>
+							<ul class="fhr-results-sales-messages">
+								<?php if ($hotel->sales_messages_1 !== '') : ?><li><?php echo $hotel->sales_messages_1; ?></li><?php endif; ?>
+								<?php if ($hotel->sales_messages_2 !== '') : ?><li><?php echo $hotel->sales_messages_2; ?></li><?php endif; ?>
+								<?php if ($hotel->sales_messages_3 !== '') : ?><li><?php echo $hotel->sales_messages_3; ?></li><?php endif; ?>
+								<?php if ($hotel->sales_messages_4 !== '') : ?><li><?php echo $hotel->sales_messages_4; ?></li><?php endif; ?>
+							</ul>
+							
+							<?php
+								$room_match = false;
+								$matching_rooms = array();
+								$non_matching_rooms = array();
+								foreach($hotel->rooms as $room) {
+									if ($data->search_details->room === $room->room_type) {
+										$room_match = true;
+										$matching_rooms[] = $room;
+									} else {
+										$non_matching_rooms[] = $room;
+									}
+								}
+							?>
+
+							<?php if (!$matching_rooms) : ?>
+								<p>This hotel has no <strong><?php echo $data->search_details->room; ?></strong> but we did find the following similar room types.</p>
+							<?php endif; ?>	
+
+							<table class="fhr-price-table" id="hotel_<?php echo $hotel->hotel_id; ?>">
+								<?php if ($matching_rooms) : ?>
+									
+									<?php foreach($matching_rooms as $room) : ?>
+										<tr>
+											<td class="fhr-table-desc"><?php echo $number_of_rooms.' x '.$room->room_type; ?> Room<br /><?php echo $room->room_desc; ?></td>								
+											<td class="fhr-table-price"><strong>&#163;<?php echo $room->price; ?></strong></td>
+											<td class="fhr-table-button"><a href="<?php echo $affwin_link.$room->booking_deeplink; ?>" title="Book <?php echo $hotel->hotel_name; ?>" class="fhr-button">Book Now</a></td>
+										</tr>
+									<?php endforeach; ?>
+
+									<?php foreach($non_matching_rooms as $room) : ?>
+										<tr class="fhr-hide">
+											<td class="fhr-table-desc"><?php echo $number_of_rooms.' x '.$room->room_type; ?> Room<br /><?php echo $room->room_desc; ?></td>								
+											<td class="fhr-table-price"><strong>&#163;<?php echo $room->price; ?></strong></td>
+											<td class="fhr-table-button"><a href="<?php echo $affwin_link.$room->booking_deeplink; ?>" title="Book <?php echo $hotel->hotel_name; ?>" class="fhr-button">Book Now</a></td>
+										</tr>
+									<?php endforeach; ?>
+
+								<?php else : ?>
+									<?php foreach($hotel->rooms as $room) : ?>
+										<tr>
+											<td class="fhr-table-desc"><?php echo $number_of_rooms.' x '.$room->room_type; ?> Room<br /><?php echo $room->room_desc; ?></td>								
+											<td class="fhr-table-price"><strong>&#163;<?php echo $room->price; ?></strong></td>
+											<td class="fhr-table-button"><a href="<?php echo $affwin_link.$room->booking_deeplink; ?>" title="Book <?php echo $hotel->hotel_name; ?>" class="fhr-button">Book Now</a></td>
+										</tr>
+									<?php endforeach; ?>
+								<?php endif; ?>
+							</table>
+
+							<?php if (!empty($non_matching_rooms)) : ?>
+								<a href="#" class="show-fhr-hidden-rooms" data-hotel-id="hotel_<?php echo $hotel->hotel_id; ?>">Show other room types</a>
+							<?php endif; ?>
+							
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<?php
+			} else {
+				echo '<div class="error">Sorry we were unable to complete your search please try again later.</div>';
+			}
+		}
 		
 		static function get($url, $data = false) {
 			$session = curl_init($url);

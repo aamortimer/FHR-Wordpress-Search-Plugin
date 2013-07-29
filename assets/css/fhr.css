@@ -1,6 +1,9 @@
 /*
 * Search Forms
 */ 
+.fhr-hide {
+	display:none;
+}
 .fhr-form .form-group {
 	clear: both;
 }
@@ -38,6 +41,7 @@
 	border-color: #51a351 #51a351 #387038;
 	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+	text-align: center;
 }
 .fhr-form #passengers .radio {
 	margin: 0 5px 0 0;
@@ -95,6 +99,28 @@
 	display: block;
 	font-size: 30px;
 }
+.fhr-results .fhr-results-image {
+	max-width: 250px;
+}
+
+.fhr-results .fhr-price-table,
+.fhr-results .fhr-price-table td {
+	border: 0;
+}
+.fhr-results .fhr-price-table .fhr-table-price {
+	font-size: 30px;
+}
+
 .fhr-airport-lounges .fhr-results-image {
 	width: 110px;
+}
+
+.show-fhr-hidden-rooms {
+	display: block;
+	text-align: center;
+	background-color: #fff1df;
+}
+.show-fhr-hidden-rooms:hover {
+	background-color: #f1e5d5;
+	text-decoration: none; 
 }

@@ -14,7 +14,7 @@
 		$results_type = isset($options['results_type']) ? $options['results_type'] : 'new';
 		$results_form = isset($options['results_form']) ? $options['results_form'] : 'airport-parking';
 		
-		if ($results_type == 'iframe' || ($results_type == 'xml' && ($results_form === 'airport-hotels' || $results_form == 'airport-parking-and-hotels')))  {
+		if ($results_type == 'iframe')  {
 			if ($results_form == 'airport-parking') {
 				$html = '<iframe src="http://www.fhr-net.co.uk/airport-parking/results/?'.$params.'" frameborder="0" scrolling="auto" width="100%" height="2000"></iframe>';	
 			} elseif ($results_form == 'airport-lounge') {
@@ -27,6 +27,8 @@
 				$html = fhr::parking_search();
 			} elseif ($results_form == 'airport-lounge') {
 				$html = fhr::lounge_search();			
+			} else {
+				$html = fhr::hotel_search();
 			}
 		}
 		

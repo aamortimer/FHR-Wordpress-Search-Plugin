@@ -66,26 +66,39 @@
 	  }); // end datepicker code
 	  
 	   $(document).on("change", "#lounge_location", function() {
-      var lounge_location;
-      lounge_location = '';
-      if ($(this).val() === "ukLounges") {
-        lounge_location = "lounges";
-      } else {
-        lounge_location = "international";
-      }
-      
-      var url = '/wp-content/plugins/fhr/lounge_airports.php?location='+lounge_location;
-      $.get(url, function(data) {
-	      $('#lounge-airport').html(data);
-      });      
-    }); // end lounge locations
+	      var lounge_location;
+	      lounge_location = '';
+	      if ($(this).val() === "ukLounges") {
+	        lounge_location = "lounges";
+	      } else {
+	        lounge_location = "international";
+	      }
+	      
+	      var url = '/wp-content/plugins/fhr/lounge_airports.php?location='+lounge_location;
+	      $.get(url, function(data) {
+		      $('#lounge-airport').html(data);
+	      });      
+	   }); // end lounge locations
 	  
 	  $('.fhr-form').submit(function(){
 		  data = $(this).serialize();
 		  p = $(this).find('input[name=p]');
 		  p.val(p.val()+'?'+data);
-		  console.log(p.val());
 	  });
 	  
+	  $('.show-fhr-hidden-rooms').click(function(e){
+	  	e.preventDefault();
+	  	data = $(this).data('hotel-id');
+	  	html = $(this).html();
+
+	  	if (html === 'Show other room types') {
+		  	$('#'+data+' .fhr-hide').show();
+		  	$(this).html('Hide other room types');
+		  } else {
+		  	$('#'+data+' .fhr-hide').hide();
+		  	$(this).html('Show other room types');
+		  }
+	  });
+
 	})
 })(jQuery);

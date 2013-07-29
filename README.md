@@ -1,4 +1,4 @@
-~Current Version:1.6~
+~Current Version:1.7~
 
 #FHR Search Plugin
 
@@ -100,6 +100,8 @@ All parameters are optional
 
 
 ##Change Log
+v1.7 Added XML results for airport hotels
+
 v1.6 Added XML results for airport lounges
 
 v1.5 Added XML results for airport parking

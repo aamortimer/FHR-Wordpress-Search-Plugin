@@ -68,7 +68,7 @@
 				<select id="<?php echo $this->get_field_id('results_type'); ?>" name="<?php echo $this->get_field_name('results_type'); ?>" style="width:100%;">
 					<option value="new" <?php echo ($results_type == 'new') ? 'selected="selected"' : ''; ?>>New Window</option>
 					<option value="iframe" <?php echo ($results_type == 'iframe') ? 'selected="selected"' : ''; ?>>iFrame</option>
-					<option value="xml" <?php echo ($results_type == 'xml') ? 'selected="selected"' : ''; ?>>XML (not available for hotels)</option>
+					<option value="xml" <?php echo ($results_type == 'xml') ? 'selected="selected"' : ''; ?>>XML</option>
 				</select>
 			</p>
 			
