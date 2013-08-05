@@ -100,6 +100,8 @@ All parameters are optional
 
 
 ##Change Log
+v1.8 Fixed error with shortcodes outputing outside containers
+
 v1.7 Added XML results for airport hotels
 
 v1.6 Added XML results for airport lounges

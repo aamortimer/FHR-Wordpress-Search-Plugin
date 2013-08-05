@@ -4,7 +4,7 @@ Plugin Name: FHR Search
 Plugin URI: http://www.fhr-net.co.uk/
 Description: Plugin to allow you to add FHR searches to your site. please visit <strong>settings</strong> when installed to add all your default options also you will be able to switch to the about tab which will list all shortcodes.
 Author: Andy Mortimer
-Version: 1.7
+Version: 1.8
 Author URI: http://www.fhr-net.co.uk/
 */
 

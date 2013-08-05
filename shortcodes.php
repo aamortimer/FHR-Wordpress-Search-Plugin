@@ -169,18 +169,21 @@
 				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-parking/results/' : get_permalink($results_page) ;
 				$airports = fhr::airports('parking');
 				require_once('forms/parking_search_form.php');
+				return parking_search_form($search_form, $airports, $rooms, $form, $agent, $affwin, $airport);
 				break;
 			case 'airport-parking-and-hotels': 
 				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-hotels/results/' : get_permalink($results_page) ;
 				$airports = fhr::airports('hotels');
 				$rooms = fhr::room_types();
 				require_once('forms/hotel_search_form.php');
+				return hotel_search_form($search_form, $airports, $rooms, $form, $agent, $affwin, $airport);
 				break;
 			case 'airport-hotels':
 				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-hotels/results/' : get_permalink($results_page);
 				$airports = fhr::airports('hotels');
 				$rooms = fhr::room_types();
 				require_once('forms/hotel_search_form.php');
+				return hotel_search_form($search_form, $airports, $rooms, $form, $agent, $affwin, $airport);
 				break;
 			case 'airport-lounge':
 				$search_form = $results_type == 'new' ? 'http://www.fhr-net.co.uk/airport-lounges/results/' : get_permalink($results_page);
@@ -192,6 +195,7 @@
 					$airports = fhr::airports('international');
 				}
 				require_once('forms/lounge_search_form.php');
+				return lounge_search_form($search_form, $airports, $form, $agent, $affwin, $airport);
 				break;
 		}
 	}
