@@ -128,7 +128,7 @@
 		 
 		$rsp = '';
 		if($data = json_decode(fhr::get($url, $data = false))) {
-			$rsp = '<div class="fhr_price_from">'."\n";
+			$rsp = '<span class="fhr_price_from">'."\n";
 			
 			foreach($data as $d) {
 				if ($affwin) {
@@ -139,7 +139,7 @@
 				$rsp .= 'from <strong class="fhr_price">&#163;'.$d->price.'</strong>'."\n";
 			}
 						
-			$rsp .= '</div>'."\n";
+			$rsp .= '</span>'."\n";
 		}
  
 		return $rsp;

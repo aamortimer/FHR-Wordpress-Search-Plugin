@@ -1,4 +1,4 @@
-~Current Version:1.7~
+~Current Version:1.9~
 
 #FHR Search Plugin
 
@@ -100,6 +100,8 @@ All parameters are optional
 
 
 ##Change Log
+v1.9 Moved price shortcodes into a span rather then a div
+
 v1.8 Fixed error with shortcodes outputing outside containers
 
 v1.7 Added XML results for airport hotels
