@@ -59,9 +59,9 @@
 			
 			foreach($data as $d) {
 				if ($affwin) {
-					$rsp .= '<li><a href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->carpark.' Airport Parking">'.$d->carpark.'</a></li>'."\n";	
+					$rsp .= '<li><a rel="nofollow" href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->carpark.' Airport Parking">'.$d->carpark.'</a></li>'."\n";	
 				} else {
-					$rsp .= '<li><a href="'.$d->link.'" title="'.$d->carpark.' Airport Parking">'.$d->carpark.'</a></li>'."\n";	
+					$rsp .= '<li><a rel="nofollow" href="'.$d->link.'" title="'.$d->carpark.' Airport Parking">'.$d->carpark.'</a></li>'."\n";	
 				}
 			}
 						
@@ -95,9 +95,9 @@
 			
 			foreach($data as $d) {
 				if ($affwin) {
-					$rsp .= '<li><a href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
+					$rsp .= '<li><a rel="nofollow" href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
 				} else {
-					$rsp .= '<li><a href="'.$d->link.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
+					$rsp .= '<li><a rel="nofollow" href="'.$d->link.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
 				}
 			}
 						
