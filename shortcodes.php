@@ -121,7 +121,8 @@
 			'airport' => $results_airport,
 			'agent' => $agent,
 			'type' => 'parking',
-			'affwin' => $affwin
+			'affwin' => $affwin,
+			'price_only' => false
 		), $atts));
 	
 		$url = 'http://www.fhr-net.co.uk/api/prices.php?agentid='.$agent.'&airport='.$airport.'&type='.$type;
@@ -131,12 +132,17 @@
 			$rsp = '<span class="fhr_price_from">'."\n";
 			
 			foreach($data as $d) {
-				if ($affwin) {
-					$rsp .= '<a class="fhr_title" href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->airport.' Airport '.ucwords($type).'">'.$d->airport.' Airport '.ucwords($type).'</a>'."\n";	
+				if ($price_only) {
+					$rsp .= '<strong class="fhr_price">&#163;'.$d->price.'</strong>'."\n";
 				} else {
-					$rsp .= '<a class="fhr_title" href="'.$d->link.'" title="'.$d->airport.' Airport '.ucwords($type).'">'.$d->airport.' Airport '.ucwords($type).'</a>'."\n";	
+					if ($affwin) {
+					$rsp .= '<a class="fhr_title" href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->airport.' Airport '.ucwords($type).'">'.$d->airport.' Airport '.ucwords($type).'</a>'."\n";	
+					} else {
+						$rsp .= '<a class="fhr_title" href="'.$d->link.'" title="'.$d->airport.' Airport '.ucwords($type).'">'.$d->airport.' Airport '.ucwords($type).'</a>'."\n";	
+					}
+					$rsp .= 'from <strong class="fhr_price">&#163;'.$d->price.'</strong>'."\n";	
 				}
-				$rsp .= 'from <strong class="fhr_price">&#163;'.$d->price.'</strong>'."\n";
+				
 			}
 						
 			$rsp .= '</span>'."\n";

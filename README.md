@@ -1,4 +1,4 @@
-~Current Version:1.9~
+~Current Version:1.9.1~
 
 #FHR Search Plugin
 
@@ -68,6 +68,7 @@ All parameters are optional defaults will be selected from the settings panel, e
 + *agent* your FHR agent ID
 + *affwin* your Affiliate Window ID
 + *airport* the default airport to select
++ *price_only* specifies weather the shortcode should only show price and no link default to false
 
 ***
 
