@@ -126,7 +126,7 @@
 		 
 		$rsp = '';
 		if($data = json_decode(fhr::get($url, $data = false))) {
-			$rsp = '<ul id="fhr_carpark_list">'."\n";
+			$rsp = '<ul id="fhr_hotel_list">'."\n";
 			
 			foreach($data as $d) {
 				if ($affwin) {
