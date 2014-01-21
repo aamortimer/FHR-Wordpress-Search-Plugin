@@ -106,6 +106,41 @@
  
 		return $rsp;
 	}
+
+	/*
+	* FHR shortcode to return list of hotels
+	*/
+	function fhr_hotel_list_images_shortcode($atts) {
+		$options = get_option('fhr_settings');
+		$results_airport = isset($options['results_airport']) ? $options['results_airport'] : 'gatwick';
+		$agent = isset($options['agent']) ? $options['agent'] : 'fhr';
+		$affwin = isset($options['affwin']) ? $options['affwin'] : '';
+		
+		extract(shortcode_atts(array(
+			'airport' => $results_airport,
+			'agent' => $agent,
+			'affwin' => $affwin
+		), $atts));
+	
+		$url = 'http://www.fhr-net.co.uk/api/hotels.php?agentid='.$agent.'&airport='.$airport;
+		 
+		$rsp = '';
+		if($data = json_decode(fhr::get($url, $data = false))) {
+			$rsp = '<ul id="fhr_carpark_list">'."\n";
+			
+			foreach($data as $d) {
+				if ($affwin) {
+					$rsp .= '<li><img src="'.$d->image.'" /><a rel="nofollow" href="http://www.awin1.com/cread.php?awinmid=3000&awinaffid='.$affwin.'&p='.urlencode($d->link).'&OverrideAgent='.$agent.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
+				} else {
+					$rsp .= '<li><img src="'.$d->image.'" /><a rel="nofollow" href="'.$d->link.'" title="'.$d->hotel.' Airport Hotels">'.$d->hotel.'</a></li>'."\n";	
+				}
+			}
+						
+			$rsp .= '</ul>'."\n";
+		}
+ 
+		return $rsp;
+	}
 	
 	
 	/*

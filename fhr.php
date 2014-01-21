@@ -4,7 +4,7 @@ Plugin Name: FHR Search
 Plugin URI: http://www.fhr-net.co.uk/
 Description: Plugin to allow you to add FHR searches to your site. please visit <strong>settings</strong> when installed to add all your default options also you will be able to switch to the about tab which will list all shortcodes.
 Author: Andy Mortimer
-Version: 1.9.1
+Version: 1.9.2
 Author URI: http://www.fhr-net.co.uk/
 */
 
@@ -104,7 +104,7 @@ add_shortcode('fhr_search_form', 'fhr_search_form_shortcode');
 add_shortcode('fhr_carpark_list', 'fhr_carpark_list_shortcode');
 add_shortcode('fhr_results', 'fhr_results_shortcode');
 add_shortcode('fhr_hotel_list', 'fhr_hotel_list_shortcode');
-
+add_shortcode('fhr_hotel_list_image', 'fhr_hotel_list_images_shortcode');
 
 
 if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
